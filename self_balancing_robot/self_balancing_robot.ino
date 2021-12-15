@@ -65,7 +65,6 @@ void loop() {
   }
 }
 
-
 void pid_routine()
 {
   float pidOutput = angle_pid.calculate(angle);      // Calculate value of pid
@@ -73,8 +72,8 @@ void pid_routine()
     forward();
   else
     backward();
-  analogWrite(right_motor_ENA , pidOutput);
-  analogWrite(left_motor_ENB, pidOutput);
+  analogWrite(right_motor_ENA , abs(pidOutput));
+  analogWrite(left_motor_ENB, abs(pidOutput));
   Serial.println(pidOutput);
 }
 
