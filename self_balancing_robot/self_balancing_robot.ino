@@ -17,9 +17,9 @@
 #define left_motor_IN4 8
 
 // PID parameters
-#define KP 8
-#define KI 1
-#define KD 0.05
+#define KP 5
+#define KI 0.03
+#define KD 0.01
 #define KN 0
 #define TS 0.005
 #define PID_PERIOD_MS 5
@@ -52,13 +52,13 @@ void setup() {
   mpu.calcOffsets(); // gyro and accelero
   Serial.println("Done!\n");
   angle_pid.setpoint(Setpoint);
-  angle_pid.limitOutput(-150, 150);
+  angle_pid.limitOutput(-70, 70);
 }
 
 void loop() {
   mpu.update();
   angle = mpu.getAngleY();
-  if (angle < -120 || angle > 120)
+  if (angle < -60 || angle > 60)
     Stop();
 
   if ((millis() - timer) > PID_PERIOD_MS) { // print data every 10ms
@@ -75,9 +75,10 @@ void pid_routine()
     backward();
   else
     forward();
-  analogWrite(right_motor_ENA , abs(pidOutput));
-  analogWrite(left_motor_ENB, abs(pidOutput));
-  Serial.println(pidOutput);
+  analogWrite(right_motor_ENA , abs(pidOutput) + 50);
+  analogWrite(left_motor_ENB, abs(pidOutput) + 50);
+  Serial.println("pid output: " + String(pidOutput));
+  Serial.println("angle: " + String(angle));
 }
 
 void forward() {
